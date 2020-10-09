@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use Illuminate\Http\Request;
 
 class ArticlesController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth')->except('index');
+    }
+
     public function index() {
-        return view('articles.index');
+        $articles = Article::all();
+        return view('articles.index', ['articles' => $articles]);
     }
 
     public function create() {
@@ -19,7 +25,7 @@ class ArticlesController extends Controller
             'title' => 'required',
             'content' => 'required|min:10'
         ]);
-    
+
         auth()->user()->articles()->create($content);
         return redirect()->route('root')->with('notice', '文章新增成功！');
     }
