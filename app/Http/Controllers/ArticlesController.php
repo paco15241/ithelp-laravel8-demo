@@ -12,7 +12,7 @@ class ArticlesController extends Controller
     }
 
     public function index() {
-        $articles = Article::orderBy('id', 'desc')->paginate(3);
+        $articles = Article::with('user')->orderBy('id', 'desc')->paginate(3);
         return view('articles.index', ['articles' => $articles]);
     }
 
